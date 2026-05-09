@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  # MySQL数据库
+  mysql:
+    image: mysql:8.0
+    container_name: hotel-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123456
+      MYSQL_DATABASE: hotel_booking
+      TZ: Asia/Shanghai
+    ports:
+      - "3435:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123456"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hotel-network
+
+  # Redis缓存
+  redis:
+    image: redis:7-alpine
+    container_name: hotel-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - hotel-network
+
+  # 后端服务
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hotel-backend
+    restart: always
+    ports:
+      - "8435:8435"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: hotel_booking
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: root123456
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      EXPORT_PATH: /app/exports
+    volumes:
+      - exports_data:/app/exports
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - hotel-network
+
+  # 前端服务
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: hotel-frontend
+    restart: always
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend
+    networks:
+      - hotel-network
+
+volumes:
+  mysql_data:
+  redis_data:
+  exports_data:
+
+networks:
+  hotel-network:
+    driver: bridge
