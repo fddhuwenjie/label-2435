@@ -62,6 +62,18 @@ CREATE TABLE IF NOT EXISTS sys_reservation (
     CONSTRAINT fk_reservation_room FOREIGN KEY (room_id) REFERENCES sys_room(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='预订表';
 
+-- 节假日配置表
+CREATE TABLE IF NOT EXISTS sys_holiday (
+    id BIGINT NOT NULL COMMENT '主键ID',
+    date DATE NOT NULL COMMENT '节假日日期',
+    name VARCHAR(100) NOT NULL COMMENT '节假日名称',
+    coefficient DECIMAL(5,2) NOT NULL DEFAULT 1.50 COMMENT '节假日加价系数',
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_date (date),
+    KEY idx_create_time (create_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='节假日配置表';
+
 -- 定金记录表
 CREATE TABLE IF NOT EXISTS sys_deposit_record (
     id BIGINT NOT NULL COMMENT '主键ID',
