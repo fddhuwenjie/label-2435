@@ -79,4 +79,29 @@ public class Constants {
      * 工作日折扣系数
      */
     public static final double WEEKDAY_RATE = 0.5;
+
+    /**
+     * 连住优惠
+     */
+    public static class StayDiscount {
+        public static final int MIN_DAYS_3 = 3;
+        public static final int MIN_DAYS_7 = 7;
+        public static final double RATE_3_DAYS = 0.95;
+        public static final double RATE_7_DAYS = 0.90;
+    }
+
+    /**
+     * 早鸟优惠
+     */
+    public static class EarlyBirdDiscount {
+        public static final int MIN_DAYS_14 = 14;
+        public static final int MIN_DAYS_30 = 30;
+        public static final double RATE_14_DAYS = 0.95;
+        public static final double RATE_30_DAYS = 0.90;
+    }
+
+    /**
+     * 默认节假日系数
+     */
+    public static final double DEFAULT_HOLIDAY_COEFFICIENT = 1.5;
 }
