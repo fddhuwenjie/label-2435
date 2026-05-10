@@ -36,6 +36,7 @@ public class SysReservationService extends ServiceImpl<SysReservationMapper, Sys
     private final SysRoomService roomService;
     private final SysUserService userService;
     private final SysDepositRecordService depositRecordService;
+    private final SysHolidayService holidayService;
 
     /**
      * 计算预订价格（预览）
@@ -50,7 +51,8 @@ public class SysReservationService extends ServiceImpl<SysReservationMapper, Sys
             throw new BusinessException("退房日期必须晚于入住日期");
         }
 
-        return PriceCalculator.calculate(room, checkInDate, checkOutDate);
+        java.util.List<com.hotel.entity.SysHoliday> holidays = holidayService.findByDateRange(checkInDate, checkOutDate.minusDays(1));
+        return PriceCalculator.calculate(room, checkInDate, checkOutDate, java.time.LocalDate.now(), holidays);
     }
 
     /**
@@ -80,7 +82,11 @@ public class SysReservationService extends ServiceImpl<SysReservationMapper, Sys
         }
 
         // 计算价格
-        PriceCalculationVO priceVO = PriceCalculator.calculate(room, request.getCheckInDate(), request.getCheckOutDate());
+        java.util.List<com.hotel.entity.SysHoliday> holidays = holidayService.findByDateRange(
+                request.getCheckInDate(), request.getCheckOutDate().minusDays(1));
+        PriceCalculationVO priceVO = PriceCalculator.calculate(
+                room, request.getCheckInDate(), request.getCheckOutDate(),
+                java.time.LocalDate.now(), holidays);
 
         // 创建预订
         SysReservation reservation = new SysReservation();
