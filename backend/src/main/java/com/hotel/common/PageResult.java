@@ -41,4 +41,12 @@ public class PageResult<T> {
         this.pages = (total + size - 1) / size;
         this.records = records;
     }
+
+    public PageResult(List<T> records, Long total) {
+        this.current = 1L;
+        this.size = 10L;
+        this.total = total;
+        this.pages = (total + size - 1) / size;
+        this.records = records;
+    }
 }

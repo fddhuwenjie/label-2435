@@ -79,4 +79,28 @@ public class Constants {
      * 工作日折扣系数
      */
     public static final double WEEKDAY_RATE = 0.5;
+
+    /**
+     * 连住优惠 - 3晚及以上折扣
+     */
+    public static final int CONSECUTIVE_STAY_DISCOUNT_THRESHOLD_1 = 3;
+    public static final double CONSECUTIVE_STAY_DISCOUNT_RATE_1 = 0.95;
+
+    /**
+     * 连住优惠 - 7晚及以上折扣
+     */
+    public static final int CONSECUTIVE_STAY_DISCOUNT_THRESHOLD_2 = 7;
+    public static final double CONSECUTIVE_STAY_DISCOUNT_RATE_2 = 0.9;
+
+    /**
+     * 早鸟优惠 - 提前14天及以上预订折扣
+     */
+    public static final int EARLY_BIRD_DISCOUNT_THRESHOLD_1 = 14;
+    public static final double EARLY_BIRD_DISCOUNT_RATE_1 = 0.95;
+
+    /**
+     * 早鸟优惠 - 提前30天及以上预订折扣
+     */
+    public static final int EARLY_BIRD_DISCOUNT_THRESHOLD_2 = 30;
+    public static final double EARLY_BIRD_DISCOUNT_RATE_2 = 0.9;
 }
